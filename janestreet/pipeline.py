@@ -472,8 +472,6 @@ class PipelineCV:
 
         scores = []
         for fold, (train_idx, valid_idx) in enumerate(cv_split):
-            if fold==0:
-                continue
             if verbose:
                 print("-"*20 + f"Fold {fold}" + "-"*20)
                 print(
