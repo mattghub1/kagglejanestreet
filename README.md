@@ -2,7 +2,7 @@
 
 Solution for the [Jane Street 2024 Kaggle competition](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/overview).
 
-A detailed description can be found in [`solution.md`](solution.md).
+A detailed description can be found in [`solution.md`](solution.md) and in [Kaggle discussion](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556542).
 
 ## Requirements
 
