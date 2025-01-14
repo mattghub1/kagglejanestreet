@@ -1,11 +1,10 @@
-
 # Solution description
 
 ## 1. Cross-validation
 
 I used a time-series CV with two folds. The validation size was set to 200 dates, as in the public dataset. It correlated well with the public LB scores. Additionally, the model from the first fold was tested on the last 200 dates with a 200-day gap to simulate the private dataset scenario.
 
-## 2. Feature engeneering and data preparation
+## 2. Feature engineering and data preparation
 
 ## 2.1 Sample
 
@@ -17,7 +16,7 @@ Simple standardization and NaN imputation with zero were applied. Other methods 
 
 ## 2.3 Feature engeneering
 
-I used all original features except for three categorical ones (features 09–11). I also selected 16 features that showed high correlation with the target and created two groups of additional features:
+I used all original features except for three categorical ones (features 09–11). I also selected 16 features that showed a high correlation with the target and created two groups of additional features:
 
 - Market averages: Averages per `date_id` and `time_id`.
 - Rolling statistics: Rolling averages and standard deviations over the last 1000 `time_id`s for each symbol.
@@ -35,9 +34,9 @@ Time-series GRU with sequence equal to one day. I ended up with two slightly dif
 - 3-layer GRU
 - 1-layer GRU followed by 2 linear layers with ReLU activation and dropout.
 
-Second model worked better than the first model on CV (+0.001), but the first model still contributed to the ensemble, so I kept it.
+The second model worked better than the first model on CV (+0.001), but the first model still contributed to the ensemble, so I kept it.
 
-MLP, time-series transfomers, cross-symbol attention and embeddings didn't work for me.
+MLP, time-series transformers, cross-symbol attention and embeddings didn't work for me.
 
 ### 3.2 Responders
 
@@ -80,7 +79,7 @@ Updates are performed only with the `responder_6` loss, without auxiliary target
 
 Updates are applied for the entire dataset provided during submission, including rows with is_scored = False.
 
-I also considered performing a full online retraining on the data up to the start of the private dataset. This would make sense because there is a significant gap between the training data and the private dataset. Howerver, retraining the model would require distributing the training process across multiple inference steps, as the one-minute time limit between dates would not be sufficient. I believe this would have been feasible but decided not to spend time on it, although my tests suggested that it could provide a +0.001 improvement in the score. Still I find it amazing that, instead of a full model retraining, performing one-day updates for almost a year is enough, and the model continues to perform well.
+I also considered performing a full online retraining on the data up to the start of the private dataset. This would make sense because there is a significant gap between the training data and the private dataset. However, retraining the model would require distributing the training process across multiple inference steps, as the one-minute time limit between dates would not be sufficient. I believe this would have been feasible but I decided not to spend time on it, although my tests suggested that it could provide a +0.001 improvement in the score. Still, I find it amazing that, instead of a full model retraining, performing one-day updates for almost a year is enough, and the model continues to perform well.
 
 ## 5. Technical details
 
@@ -88,9 +87,9 @@ I also considered performing a full online retraining on the data up to the star
 
 Inference speed was critically important, so I spent a significant amount of time optimizing my code, particularly data processing and calculation of rolling features.
 
-For my final submission, it takes 0.06 seconds to run one inference step (`time_id`), 0.02 of which are spent on data processing. Updating models weights once per `date_id` takes 3.6 seconds.
+For my final submission, it takes 0.06 seconds to run one inference step (`time_id`), 0.02 of which are spent on data processing. Updating model weights once per `date_id` takes 3.6 seconds.
 
-I used PyTorch, but since TensorFlow is said to be faster, I tried switching to it. However, after a few days of experimenting, I coudn't achieve better performance, so I decided to stick with PyTorch.
+I used PyTorch, but since TensorFlow is said to be faster, I tried switching to it. However, after a few days of experimenting, I couldn't achieve better performance, so I decided to stick with PyTorch.
 
 ### 5.2 Technical stack
 
